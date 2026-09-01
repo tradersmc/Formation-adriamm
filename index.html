@@ -30,6 +30,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--light);colo
 .btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.3)}
 .btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.08)}
 .btn-full{width:100%;text-align:center}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
 .section{padding:80px 0}
 .section-alt{background:#f1f5f9}
 .section-header{text-align:center;margin-bottom:48px}
@@ -65,11 +66,26 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--light);colo
 .tab-content.active{display:block}
 .login-card{max-width:400px}
 .login-help{text-align:center;margin-top:18px;font-size:.9rem;color:var(--gray)}
-.login-help a{color:var(--primary);font-weight:600;text-decoration:none}
+.login-help a{color:var(--primary);font-weight:600;text-decoration:none;cursor:pointer}
 .footer{background:var(--dark);color:#94a3b8;padding:40px 0;text-align:center}
 .footer-logo{width:48px;height:48px;border-radius:50%;margin-bottom:14px;background:var(--gradient)}
 .footer p{font-size:.9rem;margin-bottom:6px}
 .disclaimer{font-size:.8rem!important;opacity:.7}
+.form-msg{padding:10px 14px;border-radius:8px;font-size:.88rem;margin-bottom:16px;display:none}
+.form-msg.err{background:#fef2f2;color:#dc2626;display:block}
+.form-msg.ok{background:#dcfce7;color:#15803d;display:block}
+.file-drop{border:2px dashed var(--border);border-radius:10px;padding:16px;text-align:center;font-size:.85rem;color:var(--gray);cursor:pointer}
+.file-drop.has-file{border-color:var(--primary);color:var(--primary);font-weight:600}
+
+/* ========== ESPACE MEMBRE ========== */
+.member-shell{max-width:640px;margin:0 auto}
+.member-card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 4px 18px rgba(0,0,0,.05);margin-bottom:20px}
+.member-card h3{font-size:1.15rem;margin-bottom:14px}
+.status-line{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.status-line:last-child{border-bottom:none}
+.section-card{border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.section-card.locked{opacity:.55}
+.section-card .name{font-weight:600}
 
 /* ========== ADMIN PANEL ========== */
 #adminApp{display:none;min-height:100vh;background:#0f172a}
@@ -96,7 +112,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--light);colo
 .stat-card .value{font-size:1.8rem;font-weight:700;color:var(--dark)}
 .stat-card .value.orange{color:var(--primary)}
 .admin-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.04);margin-bottom:22px}
-.admin-card h3{font-size:1.15rem;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.admin-card h3{font-size:1.15rem;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:.9rem}
 th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border)}
@@ -112,7 +128,10 @@ tr:hover td{background:#f8fafc}
 .btn-danger:hover{background:#fecaca}
 .btn-success{background:#dcfce7;color:#15803d;border:none;cursor:pointer}
 .btn-success:hover{background:#bbf7d0}
+.btn-outline-sm{background:#eff6ff;color:#1d4ed8;border:none;cursor:pointer}
 .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mini-row{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.mini-row input{flex:1}
 @media(max-width:900px){
 .admin-sidebar{width:70px}
 .admin-sidebar .text,.admin-logo span{display:none}
@@ -162,7 +181,7 @@ Kevin Andriamm
 <div class="hero-content">
 <div class="hero-logo" style="width:120px;height:120px;margin:0 auto 28px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:#fff;font-weight:700">KA</div>
 <h1>Kevin Andriamm Trading Forex</h1>
-<p class="hero-text">Apprenez le trading Forex de manière professionnelle et recevez des signaux de qualité</p>
+<p class="hero-text" id="heroTextEl">Apprenez le trading Forex de manière professionnelle et recevez des signaux de qualité</p>
 <div class="hero-cta">
 <a href="#formation" class="btn btn-main">Voir la Formation</a>
 <a href="#signaux" class="btn btn-outline">Recevoir les Signaux</a>
@@ -174,16 +193,11 @@ Kevin Andriamm
 <div class="container">
 <div class="section-header">
 <h2>Formation Forex</h2>
-<p>Programme complet pour débutants et intermédiaires</p>
+<p>3 fizarana — HLZ, SND, CK</p>
 </div>
-<div class="modules">
-<div class="module"><div class="module-badge">1</div><h3>Bases du Forex</h3><p>Comprendre le marché, les paires de devises et le fonctionnement des brokers</p></div>
-<div class="module"><div class="module-badge">2</div><h3>Analyse Technique</h3><p>Chandeliers, supports/résistances, indicateurs et price action</p></div>
-<div class="module"><div class="module-badge">3</div><h3>Gestion du Risque</h3><p>Money management, position sizing et psychologie du trader</p></div>
-<div class="module"><div class="module-badge">4</div><h3>Stratégies</h3><p>Stratégies concrètes testées + plan de trading personnel</p></div>
-</div>
+<div class="modules" id="formationModulesPublic"></div>
 <div class="price-card">
-<div class="price-label">Prix de la formation</div>
+<div class="price-label">Prix de la formation (accès aux 3 fizarana)</div>
 <div class="price-value" id="displayPriceFormation">150 000 Ar</div>
 <p class="price-note">Paiement via Mvola • Accès à vie • Support inclus</p>
 <a href="#inscription" class="btn btn-main btn-full">S'inscrire maintenant</a>
@@ -202,7 +216,7 @@ Kevin Andriamm
 <h3>Signaux Forex Premium</h3>
 <p>Signaux quotidiens avec entrée, stop loss et take profit</p>
 <p>Analyse claire + ratio risque/récompense optimal</p>
-<p class="signal-note">⚠️ Réservé aux partenaires ayant validé leur inscription</p>
+<p class="signal-note">⚠️ Réservé aux partenaires ayant validé leur inscription (UID broker vérifié)</p>
 <a href="#inscription" class="btn btn-main">Devenir Partenaire</a>
 </div>
 </div>
@@ -222,14 +236,22 @@ Kevin Andriamm
 <div class="tab-content active" id="tabFormation">
 <div class="form-card">
 <h3>Inscription Formation</h3>
-<p class="form-desc">Remplissez le formulaire. Votre inscription sera validée après vérification du paiement Mvola.</p>
+<p class="form-desc">Créez votre compte, envoyez le paiement Mvola puis joignez la capture de preuve. Votre accès sera activé après vérification.</p>
+<div class="form-msg" id="msgFormation"></div>
 <form id="formFormation">
 <div class="form-row">
 <div class="form-group"><label>Nom complet *</label><input type="text" name="nom" required placeholder="Votre nom"></div>
 <div class="form-group"><label>Téléphone *</label><input type="tel" name="tel" required placeholder="034 xx xxx xx"></div>
 </div>
-<div class="form-group"><label>Email</label><input type="email" name="email" placeholder="email@example.com"></div>
-<div class="form-group"><label>Référence Mvola *</label><input type="text" name="ref" required placeholder="Ex: 123456789"><small>Envoyez 150 000 Ar au numéro indiqué puis entrez la référence</small></div>
+<div class="form-group"><label>Email *</label><input type="email" name="email" required placeholder="email@example.com"><small>Servira d'identifiant de connexion</small></div>
+<div class="form-group"><label>Mot de passe *</label><input type="password" name="password" required minlength="6" placeholder="6 caractères minimum"></div>
+<div class="form-group" id="mvolaNumbersDisplay"><label>Numéro(s) Mvola</label><div style="font-size:.9rem;color:var(--gray)"></div></div>
+<div class="form-group"><label>Référence Mvola *</label><input type="text" name="ref" required placeholder="Ex: 123456789"></div>
+<div class="form-group">
+<label>Preuve de paiement (capture) *</label>
+<div class="file-drop" id="dropFormation" onclick="document.getElementById('fileFormation').click()">📎 Cliquez pour joindre une capture</div>
+<input type="file" id="fileFormation" accept="image/*" style="display:none" required>
+</div>
 <button type="submit" class="btn btn-main btn-full">Envoyer l'inscription</button>
 </form>
 </div>
@@ -238,14 +260,16 @@ Kevin Andriamm
 <div class="tab-content" id="tabSignal">
 <div class="form-card">
 <h3>Inscription Signaux</h3>
-<p class="form-desc">Devenez partenaire pour recevoir les signaux Telegram.</p>
+<p class="form-desc">Créez votre compte pour devenir partenaire. Un broker et un lien partenaire vous seront attribués par l'admin.</p>
+<div class="form-msg" id="msgSignal"></div>
 <form id="formSignal">
 <div class="form-row">
 <div class="form-group"><label>Nom complet *</label><input type="text" name="nom" required placeholder="Votre nom"></div>
 <div class="form-group"><label>Téléphone *</label><input type="tel" name="tel" required placeholder="034 xx xxx xx"></div>
 </div>
-<div class="form-group"><label>Email</label><input type="email" name="email" placeholder="email@example.com"></div>
-<div class="form-group"><label>Pseudo Telegram *</label><input type="text" name="telegram" required placeholder="@votre_pseudo"></div>
+<div class="form-group"><label>Email *</label><input type="email" name="email" required placeholder="email@example.com"><small>Servira d'identifiant de connexion</small></div>
+<div class="form-group"><label>Mot de passe *</label><input type="password" name="password" required minlength="6" placeholder="6 caractères minimum"></div>
+<div class="form-group"><label>Pseudo Telegram</label><input type="text" name="telegram" placeholder="@votre_pseudo"></div>
 <button type="submit" class="btn btn-main btn-full">Devenir Partenaire</button>
 </form>
 </div>
@@ -259,13 +283,48 @@ Kevin Andriamm
 <h2>Espace Membre</h2>
 <p>Connectez-vous pour accéder à votre espace</p>
 </div>
-<div class="form-card login-card">
+
+<!-- LOGIN FORM -->
+<div class="form-card login-card" id="loginCard">
+<div class="form-msg" id="msgLogin"></div>
 <form id="formLogin">
-<div class="form-group"><label>Téléphone ou Email</label><input type="text" name="login" required></div>
+<div class="form-group"><label>Email</label><input type="email" name="email" required></div>
 <div class="form-group"><label>Mot de passe</label><input type="password" name="password" required></div>
 <button type="submit" class="btn btn-main btn-full">Se connecter</button>
 </form>
-<p class="login-help">Pas encore inscrit ? <a href="#inscription">S'inscrire</a></p>
+<p class="login-help">Pas encore inscrit ? <a href="#inscription">S'inscrire</a> · <a onclick="resetMemberPass();return false;">Mot de passe oublié ?</a></p>
+</div>
+
+<!-- MEMBER SPACE (visible après login) -->
+<div class="member-shell hidden" id="memberSpace">
+<div class="member-card">
+<h3>Bonjour <span id="mNom"></span> 👋</h3>
+<div class="status-line"><span>Statut du compte</span><span class="badge" id="mStatut"></span></div>
+<div class="status-line"><span>Type</span><span class="badge" id="mType"></span></div>
+</div>
+
+<!-- Formation access -->
+<div class="member-card hidden" id="mFormationCard">
+<h3>Vos fizarana Formation</h3>
+<div id="mFormationList"></div>
+</div>
+
+<!-- Signal workflow -->
+<div class="member-card hidden" id="mSignalCard">
+<h3>Votre parcours Signaux</h3>
+<div id="mSignalContent"></div>
+</div>
+
+<div class="member-card">
+<h3>Changer mon mot de passe</h3>
+<div class="form-msg" id="msgChangePass"></div>
+<form id="formChangePass">
+<div class="form-group"><label>Nouveau mot de passe</label><input type="password" id="mNewPass" required minlength="6"></div>
+<button type="submit" class="btn btn-main">Mettre à jour</button>
+</form>
+</div>
+
+<button class="btn btn-outline" style="color:var(--dark);border-color:var(--border)" onclick="memberLogout()">Déconnexion</button>
 </div>
 </div>
 </section>
@@ -285,14 +344,14 @@ Kevin Andriamm
 <div class="admin-login-box">
 <h2>🔐 Admin Panel</h2>
 <p class="sub">Accès réservé à l'administrateur</p>
-<div class="admin-error" id="adminError">Identifiant ou code incorrect</div>
+<div class="admin-error" id="adminError">Email ou mot de passe incorrect</div>
 <form id="formAdminLogin">
 <div class="form-group">
-<label>Identifiant Admin</label>
-<input type="text" id="adminUser" required placeholder="admin" autocomplete="username">
+<label>Email Admin</label>
+<input type="email" id="adminUser" required placeholder="admin@example.com" autocomplete="username">
 </div>
 <div class="form-group">
-<label>Code manokana</label>
+<label>Mot de passe</label>
 <input type="password" id="adminPass" required placeholder="••••••••" autocomplete="current-password">
 </div>
 <button type="submit" class="btn btn-main btn-full">Se connecter</button>
@@ -348,13 +407,10 @@ Kevin Andriamm
 <!-- MEMBRES -->
 <div class="page-section" id="page-membres">
 <div class="admin-card">
-<h3>
-Liste des membres
-<button class="btn btn-sm btn-main" onclick="exportMembers()">Exporter CSV</button>
-</h3>
+<h3>Liste des membres</h3>
 <div class="table-wrap">
 <table>
-<thead><tr><th>ID</th><th>Nom</th><th>Téléphone</th><th>Email</th><th>Type</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+<thead><tr><th>Nom</th><th>Téléphone</th><th>Email</th><th>Type</th><th>Statut</th><th>Actions</th></tr></thead>
 <tbody id="membresTable"></tbody>
 </table>
 </div>
@@ -364,11 +420,20 @@ Liste des membres
 <!-- INSCRIPTIONS -->
 <div class="page-section" id="page-inscriptions">
 <div class="admin-card">
-<h3>Toutes les inscriptions</h3>
+<h3>Formation — preuves & accès fizarana</h3>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Date</th><th>Nom</th><th>Tél</th><th>Email / Telegram</th><th>Type</th><th>Réf Mvola</th><th>Statut</th><th>Actions</th></tr></thead>
-<tbody id="inscriptionsTable"></tbody>
+<thead><tr><th>Date</th><th>Nom</th><th>Tél</th><th>Réf Mvola</th><th>Preuve</th><th>Fizarana</th><th>Statut</th><th>Actions</th></tr></thead>
+<tbody id="inscriptionsFormationTable"></tbody>
+</table>
+</div>
+</div>
+<div class="admin-card">
+<h3>Signaux — broker / partenaire / UID</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Date</th><th>Nom</th><th>Tél</th><th>Telegram</th><th>Broker</th><th>UID membre</th><th>Statut UID</th><th>Actions</th></tr></thead>
+<tbody id="inscriptionsSignalTable"></tbody>
 </table>
 </div>
 </div>
@@ -385,14 +450,6 @@ Liste des membres
 <input type="number" id="setPriceFormation" value="150000">
 </div>
 <div class="form-group">
-<label>Numéro Mvola</label>
-<input type="text" id="setMvola" value="034 00 000 00">
-</div>
-<div class="form-group">
-<label>Lien Telegram Signaux</label>
-<input type="text" id="setTelegram" value="https://t.me/votre_groupe">
-</div>
-<div class="form-group">
 <label>Email de contact</label>
 <input type="email" id="setEmail" value="contact@kevinandriamm.mg">
 </div>
@@ -401,24 +458,23 @@ Liste des membres
 <label>Message d'accueil (Hero)</label>
 <textarea id="setHeroText" rows="2">Apprenez le trading Forex de manière professionnelle et recevez des signaux de qualité</textarea>
 </div>
+<div class="form-group">
+<label>Numéros Mvola</label>
+<div id="mvolaNumbersAdmin"></div>
+<button type="button" class="btn btn-sm btn-outline-sm" onclick="addMvolaRow()">+ Ajouter un numéro</button>
+</div>
+<div class="form-group">
+<label>Lien Telegram Signaux (affiché seulement aux membres Signal validés)</label>
+<input type="text" id="setTelegram" value="https://t.me/votre_groupe">
+</div>
 <button type="submit" class="btn btn-main">Enregistrer les paramètres</button>
 </form>
 </div>
 
 <div class="admin-card">
-<h3>Sécurité Admin</h3>
-<p style="color:#64748b;margin-bottom:16px;font-size:.9rem">Changez le code manokana (enregistré localement pour le test)</p>
-<div class="form-row">
-<div class="form-group">
-<label>Nouveau code admin</label>
-<input type="password" id="newAdminPass" placeholder="Nouveau code">
-</div>
-<div class="form-group">
-<label>Confirmer</label>
-<input type="password" id="newAdminPass2" placeholder="Confirmer">
-</div>
-</div>
-<button class="btn btn-main" onclick="changeAdminPass()">Changer le code</button>
+<h3>3 fizarana Formation (HLZ / SND / CK)</h3>
+<div id="formationSectionsAdmin"></div>
+<button type="button" class="btn btn-main" onclick="saveFormationSections()">Enregistrer les liens Drive</button>
 </div>
 </div>
 
@@ -426,52 +482,112 @@ Liste des membres
 </div>
 </div>
 </div>
+
+<!-- ========== FIREBASE (ES Modules via CDN) ========== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  signOut, onAuthStateChanged, updatePassword, sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+import {
+  getFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc,
+  collection, getDocs, query, orderBy, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+import {
+  getStorage, ref as sRef, uploadBytes, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBcPvgQ64sJQ580-rZAb_nKCYuSSg1bE4o",
+  authDomain: "formation-7268c.firebaseapp.com",
+  projectId: "formation-7268c",
+  storageBucket: "formation-7268c.firebasestorage.app",
+  messagingSenderId: "244493582155",
+  appId: "1:244493582155:web:08b3378b5d279b665d32ce",
+  measurementId: "G-3ZRZVG7ZWZ"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+/* ⚠️ Ovay ho ny email admin marina (mifanaraka amin'ny firestore.rules) */
+const ADMIN_EMAIL = "admin@kevinandriamm.mg";
+
+const DEFAULT_SECTIONS = [
+  { id: "HLZ", name: "HLZ", driveLink: "" },
+  { id: "SND", name: "SND", driveLink: "" },
+  { id: "CK", name: "CK", driveLink: "" }
+];
+
+window._fb = { auth, db, storage, doc, setDoc, getDoc, updateDoc, deleteDoc,
+  collection, getDocs, query, orderBy, serverTimestamp, sRef, uploadBytes,
+  getDownloadURL, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  signOut, onAuthStateChanged, updatePassword, sendPasswordResetEmail,
+  ADMIN_EMAIL, DEFAULT_SECTIONS };
+
+window.dispatchEvent(new Event("fb-ready"));
+</script>
 
 <script>
-/* ========== CONFIG ADMIN ========== */
-const ADMIN_USER = 'admin';
-let ADMIN_PASS = localStorage.getItem('ka_admin_pass') || 'KevinAdmin2026';
+window.addEventListener("fb-ready", initApp);
 
-/* ========== DATA (LocalStorage) ========== */
-function getMembers() {
-  try { return JSON.parse(localStorage.getItem('ka_members') || '[]'); }
-  catch(e) { return []; }
-}
-function saveMembers(list) {
-  localStorage.setItem('ka_members', JSON.stringify(list));
-}
-function getSettings() {
-  try {
-    return JSON.parse(localStorage.getItem('ka_settings') || '{}');
-  } catch(e) { return {}; }
-}
-function saveSettings(s) {
-  localStorage.setItem('ka_settings', JSON.stringify(s));
+function initApp() {
+const {
+  auth, db, storage, doc, setDoc, getDoc, updateDoc, deleteDoc,
+  collection, getDocs, query, orderBy, serverTimestamp, sRef, uploadBytes,
+  getDownloadURL, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  signOut, onAuthStateChanged, updatePassword, sendPasswordResetEmail,
+  ADMIN_EMAIL, DEFAULT_SECTIONS
+} = window._fb;
+
+let currentUser = null;
+let currentMemberData = null;
+let isAdminSession = false;
+let cachedSettings = null;
+
+function showMsg(id, text, ok) {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = "form-msg " + (ok ? "ok" : "err");
 }
 
-/* ========== INIT SAMPLE DATA (si vide) ========== */
-(function initData() {
-  if (getMembers().length === 0) {
-    const sample = [
-      {id:1, nom:'Jean Rakoto', tel:'034 12 345 67', email:'jean@email.mg', type:'formation', ref:'MV123456', telegram:'', statut:'validé', date:'2026-08-28 10:15'},
-      {id:2, nom:'Marie Raso', tel:'032 98 765 43', email:'marie@email.mg', type:'signal', ref:'', telegram:'@marietrader', statut:'en attente', date:'2026-08-30 14:22'},
-      {id:3, nom:'Paul Andria', tel:'033 55 112 22', email:'paul@email.mg', type:'formation', ref:'MV789012', telegram:'', statut:'validé', date:'2026-09-01 09:05'}
-    ];
-    saveMembers(sample);
-  }
-  const s = getSettings();
-  if (!s.priceFormation) {
-    saveSettings({
+/* ---------- SETTINGS ---------- */
+async function getSettings() {
+  if (cachedSettings) return cachedSettings;
+  const snap = await getDoc(doc(db, "settings", "general"));
+  if (snap.exists()) {
+    cachedSettings = snap.data();
+  } else {
+    cachedSettings = {
       priceFormation: 150000,
-      mvola: '034 00 000 00',
-      telegram: 'https://t.me/votre_groupe',
-      email: 'contact@kevinandriamm.mg',
-      heroText: 'Apprenez le trading Forex de manière professionnelle et recevez des signaux de qualité'
-    });
+      mvolaNumbers: [{ label: "Principal", numero: "034 00 000 00" }],
+      telegramLink: "https://t.me/votre_groupe",
+      email: "contact@kevinandriamm.mg",
+      heroText: "Apprenez le trading Forex de manière professionnelle et recevez des signaux de qualité",
+      formationSections: DEFAULT_SECTIONS
+    };
+    await setDoc(doc(db, "settings", "general"), cachedSettings);
   }
-})();
+  if (!cachedSettings.formationSections) cachedSettings.formationSections = DEFAULT_SECTIONS;
+  if (!cachedSettings.mvolaNumbers) cachedSettings.mvolaNumbers = [{ label: "Principal", numero: "" }];
+  return cachedSettings;
+}
 
-/* ========== PUBLIC SITE ========== */
+async function applyPublicSettings() {
+  const s = await getSettings();
+  document.getElementById("displayPriceFormation").textContent = Number(s.priceFormation).toLocaleString("fr-FR") + " Ar";
+  document.getElementById("heroTextEl").textContent = s.heroText;
+  document.querySelector("#mvolaNumbersDisplay div").innerHTML =
+    s.mvolaNumbers.map(n => `<strong>${esc(n.label)}:</strong> ${esc(n.numero)}`).join("<br>");
+  document.getElementById("formationModulesPublic").innerHTML = s.formationSections.map((sec, i) => `
+    <div class="module"><div class="module-badge">${i+1}</div><h3>${esc(sec.name)}</h3><p>Fizarana ${esc(sec.id)} amin'ny formation</p></div>
+  `).join("");
+}
+
+/* ---------- NAV / TABS ---------- */
 const burger = document.getElementById('burger');
 const navMenu = document.getElementById('navMenu');
 if (burger) burger.addEventListener('click', () => navMenu.classList.toggle('active'));
@@ -482,10 +598,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if (href === '#') return;
     e.preventDefault();
     const t = document.querySelector(href);
-    if (t) {
-      t.scrollIntoView({behavior:'smooth', block:'start'});
-      navMenu.classList.remove('active');
-    }
+    if (t) { t.scrollIntoView({behavior:'smooth', block:'start'}); navMenu.classList.remove('active'); }
   });
 });
 
@@ -498,119 +611,251 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-/* Forms → save to localStorage */
-document.getElementById('formFormation')?.addEventListener('submit', function(e) {
-  e.preventDefault();
-  const fd = new FormData(this);
-  const members = getMembers();
-  const newId = members.length ? Math.max(...members.map(m => m.id)) + 1 : 1;
-  members.unshift({
-    id: newId,
-    nom: fd.get('nom'),
-    tel: fd.get('tel'),
-    email: fd.get('email') || '',
-    type: 'formation',
-    ref: fd.get('ref'),
-    telegram: '',
-    statut: 'en attente',
-    date: new Date().toISOString().slice(0,16).replace('T',' ')
-  });
-  saveMembers(members);
-  const b = this.querySelector('button');
-  const o = b.textContent;
-  b.textContent = '✓ Envoyé';
-  b.disabled = true;
-  b.style.background = '#16a34a';
-  setTimeout(() => {
-    alert('Inscription formation reçue.\n\nVotre demande sera vérifiée après contrôle du paiement Mvola.\nVous serez contacté une fois approuvé.');
-    b.textContent = o;
-    b.disabled = false;
-    b.style.background = '';
-    this.reset();
-  }, 800);
+function esc(str) {
+  const d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+
+/* ---------- FILE PICK (preuve paiement) ---------- */
+let selectedFile = null;
+document.getElementById('fileFormation').addEventListener('change', function(e) {
+  selectedFile = e.target.files[0] || null;
+  const drop = document.getElementById('dropFormation');
+  drop.textContent = selectedFile ? "✓ " + selectedFile.name : "📎 Cliquez pour joindre une capture";
+  drop.classList.toggle('has-file', !!selectedFile);
 });
 
-document.getElementById('formSignal')?.addEventListener('submit', function(e) {
+/* ---------- INSCRIPTION FORMATION ---------- */
+document.getElementById('formFormation').addEventListener('submit', async function(e) {
   e.preventDefault();
+  showMsg('msgFormation', '', false);
+  document.getElementById('msgFormation').style.display = 'none';
+  if (!selectedFile) { showMsg('msgFormation', 'Veuillez joindre une capture de preuve de paiement.'); return; }
   const fd = new FormData(this);
-  const members = getMembers();
-  const newId = members.length ? Math.max(...members.map(m => m.id)) + 1 : 1;
-  members.unshift({
-    id: newId,
-    nom: fd.get('nom'),
-    tel: fd.get('tel'),
-    email: fd.get('email') || '',
-    type: 'signal',
-    ref: '',
-    telegram: fd.get('telegram'),
-    statut: 'en attente',
-    date: new Date().toISOString().slice(0,16).replace('T',' ')
-  });
-  saveMembers(members);
-  const b = this.querySelector('button');
-  const o = b.textContent;
-  b.textContent = '✓ Envoyé';
-  b.disabled = true;
-  b.style.background = '#16a34a';
-  setTimeout(() => {
-    alert('Inscription signaux reçue.\n\nVous êtes maintenant partenaire.\nLe lien Telegram vous sera communiqué prochainement.');
-    b.textContent = o;
-    b.disabled = false;
-    b.style.background = '';
-    this.reset();
-  }, 800);
+  const btn = this.querySelector('button');
+  btn.disabled = true; btn.textContent = 'Envoi en cours...';
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, fd.get('email'), fd.get('password'));
+    const uid = cred.user.uid;
+    const fileRef = sRef(storage, `preuves/${uid}/${Date.now()}_${selectedFile.name}`);
+    await uploadBytes(fileRef, selectedFile);
+    const preuveURL = await getDownloadURL(fileRef);
+    await setDoc(doc(db, "members", uid), {
+      nom: fd.get('nom'), tel: fd.get('tel'), email: fd.get('email'),
+      type: 'formation', statut: 'en attente',
+      ref: fd.get('ref'), preuveURL,
+      formationAccess: [],
+      createdAt: serverTimestamp()
+    });
+    showMsg('msgFormation', "Inscription envoyée ! Votre accès sera activé après vérification du paiement.", true);
+    this.reset(); selectedFile = null;
+    document.getElementById('dropFormation').textContent = "📎 Cliquez pour joindre une capture";
+  } catch(err) {
+    showMsg('msgFormation', "Erreur : " + friendlyError(err));
+  } finally {
+    btn.disabled = false; btn.textContent = "Envoyer l'inscription";
+  }
 });
 
-document.getElementById('formLogin')?.addEventListener('submit', function(e) {
+/* ---------- INSCRIPTION SIGNAL ---------- */
+document.getElementById('formSignal').addEventListener('submit', async function(e) {
   e.preventDefault();
-  alert('Connexion membre : cette fonctionnalité sera activée après validation de votre inscription.');
+  document.getElementById('msgSignal').style.display = 'none';
+  const fd = new FormData(this);
+  const btn = this.querySelector('button');
+  btn.disabled = true; btn.textContent = 'Envoi en cours...';
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, fd.get('email'), fd.get('password'));
+    const uid = cred.user.uid;
+    await setDoc(doc(db, "members", uid), {
+      nom: fd.get('nom'), tel: fd.get('tel'), email: fd.get('email'),
+      type: 'signal', statut: 'en attente',
+      telegram: fd.get('telegram') || '',
+      broker: '', partnerLink: '',
+      uidTrading: '', uidStatut: 'non_soumis',
+      createdAt: serverTimestamp()
+    });
+    showMsg('msgSignal', "Inscription reçue ! Connectez-vous à votre espace membre pour suivre l'attribution de votre broker.", true);
+    this.reset();
+  } catch(err) {
+    showMsg('msgSignal', "Erreur : " + friendlyError(err));
+  } finally {
+    btn.disabled = false; btn.textContent = "Devenir Partenaire";
+  }
 });
+
+function friendlyError(err) {
+  const code = err.code || '';
+  if (code.includes('email-already-in-use')) return "Cet email est déjà utilisé.";
+  if (code.includes('weak-password')) return "Mot de passe trop faible (6 caractères min).";
+  if (code.includes('invalid-email')) return "Email invalide.";
+  if (code.includes('wrong-password') || code.includes('invalid-credential')) return "Email ou mot de passe incorrect.";
+  if (code.includes('user-not-found')) return "Aucun compte avec cet email.";
+  return err.message || "Une erreur est survenue.";
+}
+
+/* ---------- LOGIN MEMBRE ---------- */
+document.getElementById('formLogin').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  document.getElementById('msgLogin').style.display = 'none';
+  const fd = new FormData(this);
+  try {
+    await signInWithEmailAndPassword(auth, fd.get('email'), fd.get('password'));
+  } catch(err) {
+    showMsg('msgLogin', friendlyError(err));
+  }
+});
+
+function resetMemberPass() {
+  const email = document.querySelector('#formLogin input[name="email"]').value;
+  if (!email) { showMsg('msgLogin', "Tapez d'abord votre email ci-dessus."); return; }
+  sendPasswordResetEmail(auth, email)
+    .then(() => showMsg('msgLogin', "Email de réinitialisation envoyé.", true))
+    .catch(err => showMsg('msgLogin', friendlyError(err)));
+}
+
+function memberLogout() { signOut(auth); }
+
+/* ---------- AUTH STATE ---------- */
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user;
+  if (!user) {
+    document.getElementById('loginCard').classList.remove('hidden');
+    document.getElementById('memberSpace').classList.add('hidden');
+    return;
+  }
+  if (isAdminSession) return; // admin login handled separately
+  if (user.email === ADMIN_EMAIL) return; // avoid rendering member space for admin
+  const snap = await getDoc(doc(db, "members", user.uid));
+  if (!snap.exists()) return;
+  currentMemberData = snap.data();
+  renderMemberSpace();
+});
+
+async function renderMemberSpace() {
+  document.getElementById('loginCard').classList.add('hidden');
+  document.getElementById('memberSpace').classList.remove('hidden');
+  const m = currentMemberData;
+  document.getElementById('mNom').textContent = m.nom;
+  document.getElementById('mStatut').textContent = m.statut;
+  document.getElementById('mStatut').className = "badge " + (m.statut === 'validé' ? 'badge-ok' : 'badge-pending');
+  document.getElementById('mType').textContent = m.type;
+  document.getElementById('mType').className = "badge " + (m.type === 'formation' ? 'badge-formation' : 'badge-signal');
+
+  document.getElementById('mFormationCard').classList.toggle('hidden', m.type !== 'formation');
+  document.getElementById('mSignalCard').classList.toggle('hidden', m.type !== 'signal');
+
+  if (m.type === 'formation') {
+    const s = await getSettings();
+    const access = m.formationAccess || [];
+    document.getElementById('mFormationList').innerHTML = s.formationSections.map(sec => {
+      const unlocked = m.statut === 'validé' && access.includes(sec.id);
+      return `<div class="section-card ${unlocked ? '' : 'locked'}">
+        <span class="name">${esc(sec.name)} (${esc(sec.id)})</span>
+        ${unlocked
+          ? `<a class="btn btn-sm btn-main" href="${esc(sec.driveLink)}" target="_blank" rel="noopener">Ouvrir</a>`
+          : `<span class="badge badge-pending">🔒 verrouillé</span>`}
+      </div>`;
+    }).join('');
+  }
+
+  if (m.type === 'signal') {
+    let html = '';
+    if (m.statut !== 'validé') {
+      if (!m.broker) {
+        html += `<p style="color:var(--gray)">En attente d'attribution d'un broker par l'admin.</p>`;
+      } else {
+        html += `<div class="status-line"><span>Broker</span><strong>${esc(m.broker)}</strong></div>
+                  <div class="status-line"><span>Lien partenaire</span><a href="${esc(m.partnerLink)}" target="_blank" rel="noopener">Ouvrir</a></div>`;
+        if (m.uidStatut === 'non_soumis' || !m.uidTrading) {
+          html += `<div class="form-group" style="margin-top:14px">
+            <label>Entrez votre UID broker</label>
+            <input type="text" id="uidInput" placeholder="UID">
+            <button class="btn btn-main btn-sm" style="margin-top:8px" onclick="submitUid()">Envoyer l'UID</button>
+          </div>`;
+        } else {
+          html += `<div class="status-line"><span>UID envoyé</span><span class="badge badge-pending">en attente de vérification</span></div>`;
+        }
+      }
+    } else {
+      const s = await getSettings();
+      html += `<p style="color:#15803d;font-weight:600">✓ UID vérifié — vous êtes partenaire actif</p>
+                <div class="form-group" style="margin-top:14px">
+                <a class="btn btn-main btn-full" href="${esc(s.telegramLink)}" target="_blank" rel="noopener">Rejoindre le groupe Telegram</a></div>`;
+    }
+    document.getElementById('mSignalContent').innerHTML = html;
+  }
+}
+
+window.submitUid = async function() {
+  const val = document.getElementById('uidInput').value.trim();
+  if (!val) return;
+  await updateDoc(doc(db, "members", currentUser.uid), { uidTrading: val, uidStatut: 'en_attente' });
+  const snap = await getDoc(doc(db, "members", currentUser.uid));
+  currentMemberData = snap.data();
+  renderMemberSpace();
+};
+
+document.getElementById('formChangePass').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  document.getElementById('msgChangePass').style.display = 'none';
+  const newPass = document.getElementById('mNewPass').value;
+  try {
+    await updatePassword(currentUser, newPass);
+    showMsg('msgChangePass', "Mot de passe mis à jour ✓", true);
+    this.reset();
+  } catch(err) {
+    showMsg('msgChangePass', friendlyError(err) + " (reconnectez-vous puis réessayez si l'erreur persiste)");
+  }
+});
+
+window.memberLogout = memberLogout;
+window.resetMemberPass = resetMemberPass;
 
 /* ========== ADMIN ========== */
-function openAdminLogin() {
+window.openAdminLogin = function() {
   document.getElementById('publicSite').style.display = 'none';
   document.getElementById('adminApp').style.display = 'block';
   document.getElementById('adminLoginScreen').style.display = 'flex';
   document.getElementById('adminShell').style.display = 'none';
   document.getElementById('adminError').style.display = 'none';
-  document.getElementById('adminUser').value = '';
-  document.getElementById('adminPass').value = '';
-}
+};
 
-function backToSite() {
+window.backToSite = function() {
   document.getElementById('adminApp').style.display = 'none';
   document.getElementById('publicSite').style.display = 'block';
-}
+};
 
-function adminLogout() {
-  sessionStorage.removeItem('ka_admin_ok');
+window.adminLogout = function() {
+  isAdminSession = false;
+  signOut(auth);
   openAdminLogin();
-}
+};
 
-document.getElementById('formAdminLogin').addEventListener('submit', function(e) {
+document.getElementById('formAdminLogin').addEventListener('submit', async function(e) {
   e.preventDefault();
-  const user = document.getElementById('adminUser').value.trim();
+  const email = document.getElementById('adminUser').value.trim();
   const pass = document.getElementById('adminPass').value;
-  if (user === ADMIN_USER && pass === ADMIN_PASS) {
-    sessionStorage.setItem('ka_admin_ok', '1');
+  document.getElementById('adminError').style.display = 'none';
+  if (email !== ADMIN_EMAIL) {
+    document.getElementById('adminError').textContent = "Cet email n'est pas autorisé comme admin.";
+    document.getElementById('adminError').style.display = 'block';
+    return;
+  }
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    isAdminSession = true;
     document.getElementById('adminLoginScreen').style.display = 'none';
     document.getElementById('adminShell').style.display = 'block';
     refreshAdmin();
-  } else {
+  } catch(err) {
+    document.getElementById('adminError').textContent = friendlyError(err);
     document.getElementById('adminError').style.display = 'block';
   }
 });
 
-/* Si déjà connecté (session) */
-if (sessionStorage.getItem('ka_admin_ok') === '1') {
-  document.getElementById('publicSite').style.display = 'none';
-  document.getElementById('adminApp').style.display = 'block';
-  document.getElementById('adminLoginScreen').style.display = 'none';
-  document.getElementById('adminShell').style.display = 'block';
-  setTimeout(refreshAdmin, 50);
-}
-
-function showAdminPage(page) {
+window.showAdminPage = function(page) {
   document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
   document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
@@ -620,10 +865,18 @@ function showAdminPage(page) {
   document.getElementById('adminPageTitle').textContent = titles[page] || 'Admin';
   if (page === 'dashboard' || page === 'membres' || page === 'inscriptions') refreshAdmin();
   if (page === 'parametres') loadSettingsForm();
+};
+
+async function fetchAllMembers() {
+  const q = query(collection(db, "members"), orderBy("createdAt", "desc"));
+  const snaps = await getDocs(q);
+  const out = [];
+  snaps.forEach(s => out.push({ id: s.id, ...s.data() }));
+  return out;
 }
 
-function refreshAdmin() {
-  const members = getMembers();
+async function refreshAdmin() {
+  const members = await fetchAllMembers();
   const total = members.length;
   const formation = members.filter(m => m.type === 'formation').length;
   const signal = members.filter(m => m.type === 'signal').length;
@@ -634,11 +887,10 @@ function refreshAdmin() {
   document.getElementById('statSignal').textContent = signal;
   document.getElementById('statPending').textContent = pending;
 
-  // Recent (5 derniers)
   const recent = members.slice(0, 5);
   document.getElementById('recentTable').innerHTML = recent.map(m => `
     <tr>
-      <td>${m.date}</td>
+      <td>${fmtDate(m.createdAt)}</td>
       <td>${esc(m.nom)}</td>
       <td>${esc(m.tel)}</td>
       <td><span class="badge ${m.type==='formation'?'badge-formation':'badge-signal'}">${m.type}</span></td>
@@ -646,128 +898,170 @@ function refreshAdmin() {
     </tr>
   `).join('') || '<tr><td colspan="5" style="text-align:center;color:#94a3b8">Aucune inscription</td></tr>';
 
-  // Membres table
   document.getElementById('membresTable').innerHTML = members.map(m => `
     <tr>
-      <td>#${m.id}</td>
       <td>${esc(m.nom)}</td>
       <td>${esc(m.tel)}</td>
       <td>${esc(m.email || '-')}</td>
       <td><span class="badge ${m.type==='formation'?'badge-formation':'badge-signal'}">${m.type}</span></td>
       <td><span class="badge ${m.statut==='validé'?'badge-ok':'badge-pending'}">${m.statut}</span></td>
-      <td>${m.date}</td>
-      <td>
-        ${m.statut === 'en attente' ? `<button class="btn-sm btn-success" onclick="validateMember(${m.id})">Valider</button>` : ''}
-        <button class="btn-sm btn-danger" onclick="deleteMember(${m.id})">Suppr.</button>
-      </td>
+      <td><button class="btn-sm btn-danger" onclick="deleteMember('${m.id}')">Suppr.</button></td>
     </tr>
-  `).join('') || '<tr><td colspan="8" style="text-align:center;color:#94a3b8">Aucun membre</td></tr>';
+  `).join('') || '<tr><td colspan="6" style="text-align:center;color:#94a3b8">Aucun membre</td></tr>';
 
-  // Inscriptions table
-  document.getElementById('inscriptionsTable').innerHTML = members.map(m => `
+  const s = await getSettings();
+  const formationMembers = members.filter(m => m.type === 'formation');
+  document.getElementById('inscriptionsFormationTable').innerHTML = formationMembers.map(m => `
     <tr>
-      <td>${m.date}</td>
+      <td>${fmtDate(m.createdAt)}</td>
       <td>${esc(m.nom)}</td>
       <td>${esc(m.tel)}</td>
-      <td>${esc(m.type==='signal' ? m.telegram : (m.email || '-'))}</td>
-      <td><span class="badge ${m.type==='formation'?'badge-formation':'badge-signal'}">${m.type}</span></td>
       <td>${esc(m.ref || '-')}</td>
+      <td>${m.preuveURL ? `<a href="${esc(m.preuveURL)}" target="_blank" rel="noopener">Voir</a>` : '-'}</td>
+      <td>${s.formationSections.map(sec => `
+        <label style="display:inline-flex;align-items:center;gap:4px;margin-right:8px;font-size:.8rem">
+          <input type="checkbox" ${((m.formationAccess||[]).includes(sec.id)) ? 'checked' : ''}
+            onchange="toggleFormationAccess('${m.id}','${sec.id}',this.checked)"> ${esc(sec.id)}
+        </label>`).join('')}</td>
       <td><span class="badge ${m.statut==='validé'?'badge-ok':'badge-pending'}">${m.statut}</span></td>
       <td>
-        ${m.statut === 'en attente' ? `<button class="btn-sm btn-success" onclick="validateMember(${m.id})">Valider</button>` : ''}
-        <button class="btn-sm btn-danger" onclick="deleteMember(${m.id})">Suppr.</button>
+        ${m.statut === 'en attente' ? `<button class="btn-sm btn-success" onclick="validateMember('${m.id}')">Valider</button>` : ''}
+        <button class="btn-sm btn-danger" onclick="deleteMember('${m.id}')">Suppr.</button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="8" style="text-align:center;color:#94a3b8">Aucune inscription</td></tr>';
+
+  const signalMembers = members.filter(m => m.type === 'signal');
+  document.getElementById('inscriptionsSignalTable').innerHTML = signalMembers.map(m => `
+    <tr>
+      <td>${fmtDate(m.createdAt)}</td>
+      <td>${esc(m.nom)}</td>
+      <td>${esc(m.tel)}</td>
+      <td>${esc(m.telegram || '-')}</td>
+      <td>
+        <div class="mini-row"><input type="text" placeholder="Broker" value="${esc(m.broker||'')}" id="broker-${m.id}"></div>
+        <div class="mini-row"><input type="text" placeholder="Lien partenaire" value="${esc(m.partnerLink||'')}" id="partner-${m.id}"></div>
+        <button class="btn-sm btn-outline-sm" onclick="saveBroker('${m.id}')">Enregistrer</button>
+      </td>
+      <td>${esc(m.uidTrading || '-')}</td>
+      <td><span class="badge ${m.uidStatut==='validé'?'badge-ok':'badge-pending'}">${m.uidStatut || 'non_soumis'}</span></td>
+      <td>
+        ${m.uidTrading && m.uidStatut !== 'validé' ? `<button class="btn-sm btn-success" onclick="validateUid('${m.id}')">Valider UID</button>` : ''}
+        <button class="btn-sm btn-danger" onclick="deleteMember('${m.id}')">Suppr.</button>
       </td>
     </tr>
   `).join('') || '<tr><td colspan="8" style="text-align:center;color:#94a3b8">Aucune inscription</td></tr>';
 }
 
-function esc(str) {
-  const d = document.createElement('div');
-  d.textContent = str || '';
-  return d.innerHTML;
+function fmtDate(ts) {
+  if (!ts) return '-';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleString('fr-FR', {dateStyle:'short', timeStyle:'short'});
 }
 
-function validateMember(id) {
-  const members = getMembers();
-  const m = members.find(x => x.id === id);
-  if (m) {
-    m.statut = 'validé';
-    saveMembers(members);
-    refreshAdmin();
-  }
-}
+window.toggleFormationAccess = async function(id, sectionId, checked) {
+  const snap = await getDoc(doc(db, "members", id));
+  const data = snap.data();
+  let access = data.formationAccess || [];
+  if (checked && !access.includes(sectionId)) access.push(sectionId);
+  if (!checked) access = access.filter(x => x !== sectionId);
+  await updateDoc(doc(db, "members", id), { formationAccess: access });
+};
 
-function deleteMember(id) {
-  if (!confirm('Supprimer ce membre ?')) return;
-  let members = getMembers().filter(m => m.id !== id);
-  saveMembers(members);
+window.saveBroker = async function(id) {
+  const broker = document.getElementById('broker-' + id).value;
+  const partnerLink = document.getElementById('partner-' + id).value;
+  await updateDoc(doc(db, "members", id), { broker, partnerLink });
   refreshAdmin();
-}
+};
 
-function exportMembers() {
-  const members = getMembers();
-  let csv = 'ID,Nom,Telephone,Email,Type,Statut,Date,Ref,Telegram\n';
-  members.forEach(m => {
-    csv += `${m.id},"${m.nom}","${m.tel}","${m.email || ''}","${m.type}","${m.statut}","${m.date}","${m.ref || ''}","${m.telegram || ''}"\n`;
-  });
-  const blob = new Blob([csv], {type:'text/csv'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'membres_kevin_andriamm.csv';
-  a.click();
-}
+window.validateUid = async function(id) {
+  await updateDoc(doc(db, "members", id), { uidStatut: 'validé', statut: 'validé' });
+  refreshAdmin();
+};
 
-function loadSettingsForm() {
-  const s = getSettings();
+window.validateMember = async function(id) {
+  await updateDoc(doc(db, "members", id), { statut: 'validé' });
+  refreshAdmin();
+};
+
+window.deleteMember = async function(id) {
+  if (!confirm('Supprimer ce membre ? (le compte de connexion ne sera pas supprimé, seulement ses données)')) return;
+  await deleteDoc(doc(db, "members", id));
+  refreshAdmin();
+};
+
+/* ---------- PARAMETRES ADMIN ---------- */
+async function loadSettingsForm() {
+  cachedSettings = null;
+  const s = await getSettings();
   document.getElementById('setPriceFormation').value = s.priceFormation || 150000;
-  document.getElementById('setMvola').value = s.mvola || '';
-  document.getElementById('setTelegram').value = s.telegram || '';
+  document.getElementById('setTelegram').value = s.telegramLink || '';
   document.getElementById('setEmail').value = s.email || '';
   document.getElementById('setHeroText').value = s.heroText || '';
+
+  document.getElementById('mvolaNumbersAdmin').innerHTML = '';
+  s.mvolaNumbers.forEach(n => addMvolaRow(n.label, n.numero));
+
+  document.getElementById('formationSectionsAdmin').innerHTML = s.formationSections.map(sec => `
+    <div class="mini-row">
+      <input type="text" style="max-width:80px" value="${esc(sec.id)}" data-field="id" data-section="${sec.id}" disabled>
+      <input type="text" placeholder="Nom" value="${esc(sec.name)}" data-field="name" data-section="${sec.id}">
+      <input type="text" placeholder="Lien Google Drive" value="${esc(sec.driveLink)}" data-field="driveLink" data-section="${sec.id}">
+    </div>
+  `).join('');
 }
 
-document.getElementById('formSettings')?.addEventListener('submit', function(e) {
+window.addMvolaRow = function(label = '', numero = '') {
+  const div = document.createElement('div');
+  div.className = 'mini-row';
+  div.innerHTML = `
+    <input type="text" placeholder="Libellé (ex: Principal)" class="mvola-label" value="${esc(label)}">
+    <input type="text" placeholder="Numéro Mvola" class="mvola-num" value="${esc(numero)}">
+    <button type="button" class="btn-sm btn-danger" onclick="this.parentElement.remove()">✕</button>`;
+  document.getElementById('mvolaNumbersAdmin').appendChild(div);
+};
+
+document.getElementById('formSettings').addEventListener('submit', async function(e) {
   e.preventDefault();
+  const mvolaNumbers = Array.from(document.querySelectorAll('#mvolaNumbersAdmin .mini-row')).map(row => ({
+    label: row.querySelector('.mvola-label').value,
+    numero: row.querySelector('.mvola-num').value
+  })).filter(n => n.numero);
+
   const s = {
     priceFormation: parseInt(document.getElementById('setPriceFormation').value) || 150000,
-    mvola: document.getElementById('setMvola').value,
-    telegram: document.getElementById('setTelegram').value,
+    mvolaNumbers,
+    telegramLink: document.getElementById('setTelegram').value,
     email: document.getElementById('setEmail').value,
-    heroText: document.getElementById('setHeroText').value
+    heroText: document.getElementById('setHeroText').value,
+    formationSections: cachedSettings.formationSections
   };
-  saveSettings(s);
-  // Update public display
-  const priceEl = document.getElementById('displayPriceFormation');
-  if (priceEl) priceEl.textContent = s.priceFormation.toLocaleString('fr-FR') + ' Ar';
+  await setDoc(doc(db, "settings", "general"), s);
+  cachedSettings = s;
+  applyPublicSettings();
   alert('Paramètres enregistrés ✓');
 });
 
-function changeAdminPass() {
-  const p1 = document.getElementById('newAdminPass').value;
-  const p2 = document.getElementById('newAdminPass2').value;
-  if (!p1 || p1.length < 6) {
-    alert('Le code doit contenir au moins 6 caractères');
-    return;
-  }
-  if (p1 !== p2) {
-    alert('Les deux codes ne correspondent pas');
-    return;
-  }
-  ADMIN_PASS = p1;
-  localStorage.setItem('ka_admin_pass', p1);
-  document.getElementById('newAdminPass').value = '';
-  document.getElementById('newAdminPass2').value = '';
-  alert('Code admin modifié avec succès ✓');
-}
+window.saveFormationSections = async function() {
+  const rows = document.querySelectorAll('#formationSectionsAdmin [data-section]');
+  const bySection = {};
+  rows.forEach(input => {
+    const id = input.dataset.section;
+    bySection[id] = bySection[id] || { id };
+    bySection[id][input.dataset.field] = input.value;
+  });
+  const formationSections = Object.values(bySection);
+  await updateDoc(doc(db, "settings", "general"), { formationSections });
+  cachedSettings.formationSections = formationSections;
+  applyPublicSettings();
+  alert('Fizarana formation enregistrés ✓');
+};
 
-/* Apply settings on load */
-(function applySettings() {
-  const s = getSettings();
-  if (s.priceFormation) {
-    const el = document.getElementById('displayPriceFormation');
-    if (el) el.textContent = Number(s.priceFormation).toLocaleString('fr-FR') + ' Ar';
-  }
-})();
+/* ---------- INIT ---------- */
+applyPublicSettings();
+
+} // end initApp
 </script>
 </body>
 </html>

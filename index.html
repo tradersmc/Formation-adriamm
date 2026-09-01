@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="mg">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -193,11 +193,11 @@ Kevin Andriamm
 <div class="container">
 <div class="section-header">
 <h2>Formation Forex</h2>
-<p>3 fizarana — HLZ, SND, CK</p>
+<p>3 sections — HLZ, SND, CK</p>
 </div>
 <div class="modules" id="formationModulesPublic"></div>
 <div class="price-card">
-<div class="price-label">Prix de la formation (accès aux 3 fizarana)</div>
+<div class="price-label">Prix de la formation (accès aux 3 sections)</div>
 <div class="price-value" id="displayPriceFormation">150 000 Ar</div>
 <p class="price-note">Paiement via Mvola • Accès à vie • Support inclus</p>
 <a href="#inscription" class="btn btn-main btn-full">S'inscrire maintenant</a>
@@ -305,7 +305,7 @@ Kevin Andriamm
 
 <!-- Formation access -->
 <div class="member-card hidden" id="mFormationCard">
-<h3>Vos fizarana Formation</h3>
+<h3>Vos sections Formation</h3>
 <div id="mFormationList"></div>
 </div>
 
@@ -420,10 +420,10 @@ Kevin Andriamm
 <!-- INSCRIPTIONS -->
 <div class="page-section" id="page-inscriptions">
 <div class="admin-card">
-<h3>Formation — preuves & accès fizarana</h3>
+<h3>Formation — preuves & accès sections</h3>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Date</th><th>Nom</th><th>Tél</th><th>Réf Mvola</th><th>Preuve</th><th>Fizarana</th><th>Statut</th><th>Actions</th></tr></thead>
+<thead><tr><th>Date</th><th>Nom</th><th>Tél</th><th>Réf Mvola</th><th>Preuve</th><th>Sections</th><th>Statut</th><th>Actions</th></tr></thead>
 <tbody id="inscriptionsFormationTable"></tbody>
 </table>
 </div>
@@ -472,7 +472,7 @@ Kevin Andriamm
 </div>
 
 <div class="admin-card">
-<h3>3 fizarana Formation (HLZ / SND / CK)</h3>
+<h3>3 sections Formation (HLZ / SND / CK)</h3>
 <div id="formationSectionsAdmin"></div>
 <button type="button" class="btn btn-main" onclick="saveFormationSections()">Enregistrer les liens Drive</button>
 </div>
@@ -513,7 +513,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-/* ⚠️ Ovay ho ny email admin marina (mifanaraka amin'ny firestore.rules) */
+/* ⚠️ Remplacez par l'email admin réel (doit correspondre aux règles Firestore) */
 const ADMIN_EMAIL = "admin@kevinandriamm.mg";
 
 const DEFAULT_SECTIONS = [
@@ -583,7 +583,7 @@ async function applyPublicSettings() {
   document.querySelector("#mvolaNumbersDisplay div").innerHTML =
     s.mvolaNumbers.map(n => `<strong>${esc(n.label)}:</strong> ${esc(n.numero)}`).join("<br>");
   document.getElementById("formationModulesPublic").innerHTML = s.formationSections.map((sec, i) => `
-    <div class="module"><div class="module-badge">${i+1}</div><h3>${esc(sec.name)}</h3><p>Fizarana ${esc(sec.id)} amin'ny formation</p></div>
+    <div class="module"><div class="module-badge">${i+1}</div><h3>${esc(sec.name)}</h3><p>Section ${esc(sec.id)} de la formation</p></div>
   `).join("");
 }
 
@@ -1055,7 +1055,7 @@ window.saveFormationSections = async function() {
   await updateDoc(doc(db, "settings", "general"), { formationSections });
   cachedSettings.formationSections = formationSections;
   applyPublicSettings();
-  alert('Fizarana formation enregistrés ✓');
+  alert('Sections formation enregistrées ✓');
 };
 
 /* ---------- INIT ---------- */

@@ -154,6 +154,15 @@ tr:hover td{background:#f8fafc}
 .hidden{display:none!important}
 .page-section{display:none}
 .page-section.active{display:block}
+#adminBurger{display:block}
+.sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
+.sidebar-backdrop.show{display:block}
+.loading-row{text-align:center;color:#94a3b8;padding:24px}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid #e2e8f0;border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(min-width:901px){
+#adminBurger{display:none}
+}
 </style>
 </head>
 <body>
@@ -193,11 +202,11 @@ Kevin Andriamm
 <div class="container">
 <div class="section-header">
 <h2>Formation Forex</h2>
-<p>3 sections — HLZ, SND, CK</p>
+<p>3 parties — HLZ, SND, CK</p>
 </div>
 <div class="modules" id="formationModulesPublic"></div>
 <div class="price-card">
-<div class="price-label">Prix de la formation (accès aux 3 sections)</div>
+<div class="price-label">Prix de la formation (accès aux 3 parties)</div>
 <div class="price-value" id="displayPriceFormation">150 000 Ar</div>
 <p class="price-note">Paiement via Mvola • Accès à vie • Support inclus</p>
 <a href="#inscription" class="btn btn-main btn-full">S'inscrire maintenant</a>
@@ -305,7 +314,7 @@ Kevin Andriamm
 
 <!-- Formation access -->
 <div class="member-card hidden" id="mFormationCard">
-<h3>Vos sections Formation</h3>
+<h3>Vos parties Formation</h3>
 <div id="mFormationList"></div>
 </div>
 
@@ -364,6 +373,7 @@ Kevin Andriamm
 
 <!-- ADMIN DASHBOARD -->
 <div class="admin-shell" id="adminShell">
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleAdminSidebar()"></div>
 <aside class="admin-sidebar" id="adminSidebar">
 <div class="admin-logo">📊 <span>Admin Panel</span></div>
 <ul class="admin-nav">
@@ -377,7 +387,7 @@ Kevin Andriamm
 
 <div class="admin-main">
 <div class="admin-topbar">
-<button class="burger" style="display:none;color:#0f172a" id="adminBurger" onclick="document.getElementById('adminSidebar').classList.toggle('open')">☰</button>
+<button class="burger" style="color:#0f172a" id="adminBurger" onclick="toggleAdminSidebar()">☰</button>
 <h1 id="adminPageTitle">Dashboard</h1>
 <div style="display:flex;align-items:center;gap:12px">
 <span style="font-size:.9rem;color:#64748b">Connecté en tant qu'<strong>Admin</strong></span>
@@ -420,10 +430,10 @@ Kevin Andriamm
 <!-- INSCRIPTIONS -->
 <div class="page-section" id="page-inscriptions">
 <div class="admin-card">
-<h3>Formation — preuves & accès sections</h3>
+<h3>Formation — preuves & accès parties</h3>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Date</th><th>Nom</th><th>Tél</th><th>Réf Mvola</th><th>Preuve</th><th>Sections</th><th>Statut</th><th>Actions</th></tr></thead>
+<thead><tr><th>Date</th><th>Nom</th><th>Tél</th><th>Réf Mvola</th><th>Preuve</th><th>Parties</th><th>Statut</th><th>Actions</th></tr></thead>
 <tbody id="inscriptionsFormationTable"></tbody>
 </table>
 </div>
@@ -472,7 +482,7 @@ Kevin Andriamm
 </div>
 
 <div class="admin-card">
-<h3>3 sections Formation (HLZ / SND / CK)</h3>
+<h3>3 parties Formation (HLZ / SND / CK)</h3>
 <div id="formationSectionsAdmin"></div>
 <button type="button" class="btn btn-main" onclick="saveFormationSections()">Enregistrer les liens Drive</button>
 </div>
@@ -513,7 +523,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-/* ⚠️ Remplacez par l'email admin réel (doit correspondre aux règles Firestore) */
+/* ⚠️ Remplacez par l'email admin réel (correspondant aux règles Firestore) */
 const ADMIN_EMAIL = "admin@kevinandriamm.mg";
 
 const DEFAULT_SECTIONS = [
@@ -583,7 +593,7 @@ async function applyPublicSettings() {
   document.querySelector("#mvolaNumbersDisplay div").innerHTML =
     s.mvolaNumbers.map(n => `<strong>${esc(n.label)}:</strong> ${esc(n.numero)}`).join("<br>");
   document.getElementById("formationModulesPublic").innerHTML = s.formationSections.map((sec, i) => `
-    <div class="module"><div class="module-badge">${i+1}</div><h3>${esc(sec.name)}</h3><p>Section ${esc(sec.id)} de la formation</p></div>
+    <div class="module"><div class="module-badge">${i+1}</div><h3>${esc(sec.name)}</h3><p>Partie ${esc(sec.id)} de la formation</p></div>
   `).join("");
 }
 
@@ -855,6 +865,11 @@ document.getElementById('formAdminLogin').addEventListener('submit', async funct
   }
 });
 
+window.toggleAdminSidebar = function() {
+  document.getElementById('adminSidebar').classList.toggle('open');
+  document.getElementById('sidebarBackdrop').classList.toggle('show');
+};
+
 window.showAdminPage = function(page) {
   document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
@@ -863,6 +878,9 @@ window.showAdminPage = function(page) {
   if (link) link.classList.add('active');
   const titles = {dashboard:'Dashboard', membres:'Membres', inscriptions:'Inscriptions', parametres:'Paramètres'};
   document.getElementById('adminPageTitle').textContent = titles[page] || 'Admin';
+  // Close sidebar on mobile after navigating
+  document.getElementById('adminSidebar').classList.remove('open');
+  document.getElementById('sidebarBackdrop').classList.remove('show');
   if (page === 'dashboard' || page === 'membres' || page === 'inscriptions') refreshAdmin();
   if (page === 'parametres') loadSettingsForm();
 };
@@ -876,6 +894,12 @@ async function fetchAllMembers() {
 }
 
 async function refreshAdmin() {
+  const loadingHtml = '<tr><td colspan="8" class="loading-row"><span class="spinner"></span>Chargement...</td></tr>';
+  document.getElementById('recentTable').innerHTML = loadingHtml;
+  document.getElementById('membresTable').innerHTML = loadingHtml;
+  document.getElementById('inscriptionsFormationTable').innerHTML = loadingHtml;
+  document.getElementById('inscriptionsSignalTable').innerHTML = loadingHtml;
+
   const members = await fetchAllMembers();
   const total = members.length;
   const formation = members.filter(m => m.type === 'formation').length;
@@ -976,11 +1000,13 @@ window.saveBroker = async function(id) {
 };
 
 window.validateUid = async function(id) {
+  if (!confirm("Valider cet UID ? Le membre sera considéré comme partenaire actif et pourra accéder au groupe Telegram.")) return;
   await updateDoc(doc(db, "members", id), { uidStatut: 'validé', statut: 'validé' });
   refreshAdmin();
 };
 
 window.validateMember = async function(id) {
+  if (!confirm("Valider ce membre ? Son accès sera activé immédiatement.")) return;
   await updateDoc(doc(db, "members", id), { statut: 'validé' });
   refreshAdmin();
 };
@@ -1055,7 +1081,7 @@ window.saveFormationSections = async function() {
   await updateDoc(doc(db, "settings", "general"), { formationSections });
   cachedSettings.formationSections = formationSections;
   applyPublicSettings();
-  alert('Sections formation enregistrées ✓');
+  alert('Parties formation enregistrées ✓');
 };
 
 /* ---------- INIT ---------- */

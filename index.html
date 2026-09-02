@@ -1081,6 +1081,7 @@ window.deleteMember = async function(id) {
 
 /* ---------- PARAMETRES ADMIN ---------- */
 async function loadSettingsForm() {
+ try {
   cachedSettings = null;
   const s = await getSettings();
   document.getElementById('setPriceFormation').value = s.priceFormation || 150000;
@@ -1093,9 +1094,14 @@ async function loadSettingsForm() {
   s.mvolaNumbers.forEach(n => addMvolaRow(n.label, n.numero));
 
   renderFormationSectionsAdmin(s.formationSections);
+ } catch (err) {
+  alert('Erreur chargement paramètres : ' + err.message);
+  console.error(err);
+ }
 }
 
 function renderFormationSectionsAdmin(sections) {
+ try {
   document.getElementById('formationSectionsAdmin').innerHTML = sections.map(sec => `
     <div class="admin-card" style="background:#f8fafc;box-shadow:none;border:1px solid var(--border)">
       <h3>${esc(sec.name)} <span style="font-size:.75rem;color:var(--gray);font-weight:400">(${esc(sec.id)})</span></h3>
@@ -1110,6 +1116,11 @@ function renderFormationSectionsAdmin(sections) {
       <button type="button" class="btn btn-sm btn-main" style="margin-left:8px" onclick="saveFormationSections()">Enregistrer cette partie</button>
     </div>
   `).join('');
+ } catch (err) {
+  alert('Erreur affichage leçons : ' + err.message);
+  console.error(err);
+  document.getElementById('formationSectionsAdmin').innerHTML = '<p style="color:#dc2626">Erreur de chargement des parties.</p>';
+ }
 }
 
 function lessonRowHtml(sectionId, index, lesson) {

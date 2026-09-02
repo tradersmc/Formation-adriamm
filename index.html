@@ -477,14 +477,27 @@ Kevin Andriamm
 <label>Lien Telegram Signaux (affiché seulement aux membres Signal validés)</label>
 <input type="text" id="setTelegram" value="https://t.me/votre_groupe">
 </div>
+<div class="form-group">
+<label>Message d'accueil Partenaire (affiché au membre à côté de son lien partenaire)</label>
+<textarea id="setPartnerMsg" rows="2">Bienvenue chez nos partenaires ! Utilisez le lien ci-dessous pour ouvrir votre compte broker.</textarea>
+</div>
 <button type="submit" class="btn btn-main">Enregistrer les paramètres</button>
 </form>
 </div>
 
 <div class="admin-card">
 <h3>3 parties Formation (HLZ / SND / CK)</h3>
+<p class="form-desc">Chaque partie contient plusieurs leçons. Chaque leçon peut avoir un lien Google Drive pour le PDF et/ou la vidéo.</p>
 <div id="formationSectionsAdmin"></div>
-<button type="button" class="btn btn-main" onclick="saveFormationSections()">Enregistrer les liens Drive</button>
+</div>
+</div>
+
+<!-- ========== VISIONNEUSE LEÇON (PDF/Vidéo) ========== -->
+<div id="lessonViewerOverlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.85);z-index:2000;padding:16px;overflow-y:auto">
+<div style="background:#fff;border-radius:16px;max-width:720px;margin:20px auto;padding:20px;position:relative">
+<button onclick="closeLessonViewer()" style="position:absolute;top:14px;right:14px;background:#f1f5f9;border:none;border-radius:50%;width:34px;height:34px;font-size:1.1rem;cursor:pointer">✕</button>
+<h3 id="lessonViewerTitle" style="margin-bottom:16px;padding-right:40px"></h3>
+<div id="lessonViewerBody"></div>
 </div>
 </div>
 
@@ -527,9 +540,9 @@ const storage = getStorage(app);
 const ADMIN_EMAIL = "admin@kevinandriamm.mg";
 
 const DEFAULT_SECTIONS = [
-  { id: "HLZ", name: "HLZ", driveLink: "" },
-  { id: "SND", name: "SND", driveLink: "" },
-  { id: "CK", name: "CK", driveLink: "" }
+  { id: "HLZ", name: "HLZ", lessons: [] },
+  { id: "SND", name: "SND", lessons: [] },
+  { id: "CK", name: "CK", lessons: [] }
 ];
 
 window._fb = { auth, db, storage, doc, setDoc, getDoc, updateDoc, deleteDoc,
@@ -575,6 +588,7 @@ async function getSettings() {
       priceFormation: 150000,
       mvolaNumbers: [{ label: "Principal", numero: "034 00 000 00" }],
       telegramLink: "https://t.me/votre_groupe",
+      partnerWelcomeMessage: "Bienvenue chez nos partenaires ! Utilisez le lien ci-dessous pour ouvrir votre compte broker.",
       email: "contact@kevinandriamm.mg",
       heroText: "Apprenez le trading Forex de manière professionnelle et recevez des signaux de qualité",
       formationSections: DEFAULT_SECTIONS
@@ -582,7 +596,9 @@ async function getSettings() {
     await setDoc(doc(db, "settings", "general"), cachedSettings);
   }
   if (!cachedSettings.formationSections) cachedSettings.formationSections = DEFAULT_SECTIONS;
+  cachedSettings.formationSections.forEach(sec => { if (!sec.lessons) sec.lessons = []; });
   if (!cachedSettings.mvolaNumbers) cachedSettings.mvolaNumbers = [{ label: "Principal", numero: "" }];
+  if (!cachedSettings.partnerWelcomeMessage) cachedSettings.partnerWelcomeMessage = "Bienvenue chez nos partenaires ! Utilisez le lien ci-dessous pour ouvrir votre compte broker.";
   return cachedSettings;
 }
 
@@ -761,11 +777,21 @@ async function renderMemberSpace() {
     const access = m.formationAccess || [];
     document.getElementById('mFormationList').innerHTML = s.formationSections.map(sec => {
       const unlocked = m.statut === 'validé' && access.includes(sec.id);
-      return `<div class="section-card ${unlocked ? '' : 'locked'}">
-        <span class="name">${esc(sec.name)} (${esc(sec.id)})</span>
-        ${unlocked
-          ? `<a class="btn btn-sm btn-main" href="${esc(sec.driveLink)}" target="_blank" rel="noopener">Ouvrir</a>`
-          : `<span class="badge badge-pending">🔒 verrouillé</span>`}
+      const lessons = sec.lessons || [];
+      return `<div class="section-card-wrap" style="border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden">
+        <div class="section-card ${unlocked ? '' : 'locked'}" style="border:none;border-radius:0;margin-bottom:0;cursor:${unlocked ? 'pointer' : 'default'}"
+          ${unlocked ? `onclick="this.nextElementSibling.classList.toggle('hidden')"` : ''}>
+          <span class="name">${esc(sec.name)} (${esc(sec.id)}) ${unlocked ? `— ${lessons.length} leçon(s)` : ''}</span>
+          ${unlocked ? `<span class="badge badge-ok">✓ Débloqué</span>` : `<span class="badge badge-pending">🔒 verrouillé</span>`}
+        </div>
+        ${unlocked ? `<div class="hidden" style="padding:0 16px 12px">
+          ${lessons.length === 0 ? '<p style="color:var(--gray);font-size:.9rem;padding:8px 0">Aucune leçon ajoutée pour le moment.</p>' :
+            lessons.map((l, i) => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--border)">
+              <span style="font-size:.92rem">${i+1}. ${esc(l.title)}</span>
+              <button class="btn-sm btn-outline-sm" onclick='openLessonViewer(${JSON.stringify(l).replace(/'/g,"&apos;")})'>Voir</button>
+            </div>`).join('')}
+        </div>` : ''}
       </div>`;
     }).join('');
   }
@@ -776,7 +802,9 @@ async function renderMemberSpace() {
       if (!m.broker) {
         html += `<p style="color:var(--gray)">En attente d'attribution d'un broker par l'admin.</p>`;
       } else {
-        html += `<div class="status-line"><span>Broker</span><strong>${esc(m.broker)}</strong></div>
+        const s = await getSettings();
+        html += `<div class="form-group" style="background:#fff7ed;border-radius:10px;padding:14px;color:#c2410c;margin-bottom:14px">${esc(s.partnerWelcomeMessage || '')}</div>
+                  <div class="status-line"><span>Broker</span><strong>${esc(m.broker)}</strong></div>
                   <div class="status-line"><span>Lien partenaire</span><a href="${esc(m.partnerLink)}" target="_blank" rel="noopener">Ouvrir</a></div>`;
         if (m.uidStatut === 'non_soumis' || !m.uidTrading) {
           html += `<div class="form-group" style="margin-top:14px">
@@ -797,6 +825,40 @@ async function renderMemberSpace() {
     document.getElementById('mSignalContent').innerHTML = html;
   }
 }
+
+function toDriveEmbed(url) {
+  if (!url) return '';
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+  if (m) return `https://drive.google.com/file/d/${m[1]}/preview`;
+  return url;
+}
+
+window.openLessonViewer = function(lesson) {
+  document.getElementById('lessonViewerTitle').textContent = lesson.title || 'Leçon';
+  let body = '';
+  if (lesson.videoLink) {
+    body += `<p style="font-weight:600;margin-bottom:8px">🎬 Vidéo</p>
+      <div style="position:relative;padding-top:56%;border-radius:10px;overflow:hidden;margin-bottom:20px">
+        <iframe src="${esc(toDriveEmbed(lesson.videoLink))}" style="position:absolute;inset:0;width:100%;height:100%;border:none" allow="autoplay" allowfullscreen></iframe>
+      </div>`;
+  }
+  if (lesson.pdfLink) {
+    body += `<p style="font-weight:600;margin-bottom:8px">📄 PDF</p>
+      <div style="position:relative;padding-top:130%;border-radius:10px;overflow:hidden;border:1px solid var(--border)">
+        <iframe src="${esc(toDriveEmbed(lesson.pdfLink))}" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen></iframe>
+      </div>`;
+  }
+  if (!lesson.videoLink && !lesson.pdfLink) {
+    body = '<p style="color:var(--gray)">Aucun contenu disponible pour cette leçon pour le moment.</p>';
+  }
+  document.getElementById('lessonViewerBody').innerHTML = body;
+  document.getElementById('lessonViewerOverlay').style.display = 'block';
+};
+
+window.closeLessonViewer = function() {
+  document.getElementById('lessonViewerOverlay').style.display = 'none';
+  document.getElementById('lessonViewerBody').innerHTML = '';
+};
 
 window.submitUid = async function() {
   const val = document.getElementById('uidInput').value.trim();
@@ -1025,18 +1087,50 @@ async function loadSettingsForm() {
   document.getElementById('setTelegram').value = s.telegramLink || '';
   document.getElementById('setEmail').value = s.email || '';
   document.getElementById('setHeroText').value = s.heroText || '';
+  document.getElementById('setPartnerMsg').value = s.partnerWelcomeMessage || '';
 
   document.getElementById('mvolaNumbersAdmin').innerHTML = '';
   s.mvolaNumbers.forEach(n => addMvolaRow(n.label, n.numero));
 
-  document.getElementById('formationSectionsAdmin').innerHTML = s.formationSections.map(sec => `
-    <div class="mini-row">
-      <input type="text" style="max-width:80px" value="${esc(sec.id)}" data-field="id" data-section="${sec.id}" disabled>
-      <input type="text" placeholder="Nom" value="${esc(sec.name)}" data-field="name" data-section="${sec.id}">
-      <input type="text" placeholder="Lien Google Drive" value="${esc(sec.driveLink)}" data-field="driveLink" data-section="${sec.id}">
+  renderFormationSectionsAdmin(s.formationSections);
+}
+
+function renderFormationSectionsAdmin(sections) {
+  document.getElementById('formationSectionsAdmin').innerHTML = sections.map(sec => `
+    <div class="admin-card" style="background:#f8fafc;box-shadow:none;border:1px solid var(--border)">
+      <h3>${esc(sec.name)} <span style="font-size:.75rem;color:var(--gray);font-weight:400">(${esc(sec.id)})</span></h3>
+      <div class="form-group">
+        <label>Nom de la partie</label>
+        <input type="text" value="${esc(sec.name)}" data-section-name="${sec.id}">
+      </div>
+      <div id="lessons-${sec.id}">
+        ${(sec.lessons || []).map((l, i) => lessonRowHtml(sec.id, i, l)).join('')}
+      </div>
+      <button type="button" class="btn-sm btn-outline-sm" onclick="addLessonRow('${sec.id}')">+ Ajouter une leçon</button>
+      <button type="button" class="btn btn-sm btn-main" style="margin-left:8px" onclick="saveFormationSections()">Enregistrer cette partie</button>
     </div>
   `).join('');
 }
+
+function lessonRowHtml(sectionId, index, lesson) {
+  lesson = lesson || { title: '', pdfLink: '', videoLink: '' };
+  return `
+    <div class="admin-card" style="background:#fff;box-shadow:none;border:1px dashed var(--border);padding:14px;margin-bottom:10px" data-lesson-row data-lesson-index="${index}">
+      <div class="mini-row">
+        <input type="text" placeholder="Titre de la leçon" class="lesson-title" value="${esc(lesson.title)}">
+        <button type="button" class="btn-sm btn-danger" onclick="this.closest('[data-lesson-row]').remove()">✕</button>
+      </div>
+      <div class="mini-row"><input type="text" placeholder="Lien PDF (Google Drive)" class="lesson-pdf" value="${esc(lesson.pdfLink)}"></div>
+      <div class="mini-row"><input type="text" placeholder="Lien Vidéo (Google Drive)" class="lesson-video" value="${esc(lesson.videoLink)}"></div>
+    </div>`;
+}
+
+window.addLessonRow = function(sectionId) {
+  const container = document.getElementById('lessons-' + sectionId);
+  const div = document.createElement('div');
+  div.innerHTML = lessonRowHtml(sectionId, container.children.length, null);
+  container.appendChild(div.firstElementChild);
+};
 
 window.addMvolaRow = function(label = '', numero = '') {
   const div = document.createElement('div');
@@ -1059,6 +1153,7 @@ document.getElementById('formSettings').addEventListener('submit', async functio
     priceFormation: parseInt(document.getElementById('setPriceFormation').value) || 150000,
     mvolaNumbers,
     telegramLink: document.getElementById('setTelegram').value,
+    partnerWelcomeMessage: document.getElementById('setPartnerMsg').value,
     email: document.getElementById('setEmail').value,
     heroText: document.getElementById('setHeroText').value,
     formationSections: cachedSettings.formationSections
@@ -1070,18 +1165,20 @@ document.getElementById('formSettings').addEventListener('submit', async functio
 });
 
 window.saveFormationSections = async function() {
-  const rows = document.querySelectorAll('#formationSectionsAdmin [data-section]');
-  const bySection = {};
-  rows.forEach(input => {
-    const id = input.dataset.section;
-    bySection[id] = bySection[id] || { id };
-    bySection[id][input.dataset.field] = input.value;
+  const formationSections = cachedSettings.formationSections.map(sec => {
+    const card = document.getElementById('lessons-' + sec.id);
+    const nameInput = document.querySelector(`[data-section-name="${sec.id}"]`);
+    const lessons = Array.from(card.querySelectorAll('[data-lesson-row]')).map(row => ({
+      title: row.querySelector('.lesson-title').value,
+      pdfLink: row.querySelector('.lesson-pdf').value,
+      videoLink: row.querySelector('.lesson-video').value
+    })).filter(l => l.title);
+    return { id: sec.id, name: nameInput ? nameInput.value : sec.name, lessons };
   });
-  const formationSections = Object.values(bySection);
   await updateDoc(doc(db, "settings", "general"), { formationSections });
   cachedSettings.formationSections = formationSections;
   applyPublicSettings();
-  alert('Parties formation enregistrées ✓');
+  alert('Leçons enregistrées ✓');
 };
 
 /* ---------- INIT ---------- */
